@@ -1,0 +1,18 @@
+## Interface: 110007
+
+## Title: LibEventChain
+## Notes: An easier way to perform a chain of event activities.
+## Version: @project-version@
+## Author: Hsiwei Chang
+## X-Category: Library
+
+## OptionalDeps: LibStub, LibSimpleTester
+
+## LoadOnDemand: 1
+
+#@no-lib-strip@
+libs\LibStub\LibStub.lua
+libs\LibSimpleTester\LibSimpleTester.lua
+#@end-no-lib-strip@
+
+LibEventChain\LibEventChain.lua
