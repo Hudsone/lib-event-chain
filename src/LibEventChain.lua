@@ -42,10 +42,12 @@ local locals = {}
 ---@field turnOn function Turns on the this ChainNode.
 ---@field callback function The callback. Works differently between EventChain and CallbackChain.
 ---@field next ChainNode[] The next ChainNodes.
+---@field boundFrame? Frame The frame used to listen events.
 
 ---@class EventChain: ChainNode The event chain.
 ---@field event string The event to listen.
 ---@field callback function The callback, which all event payloads will be passed to it (the parameters after the event name).
+---@field regardTheCallbackReturn boolean Decides whether to invoke the callback first and do nothing if the return value is `false`.
 
 ---@class CallbackChain: ChainNode The callback chain.
 ---@field callback function The callback, which all event payloads will be passed to it (the parameters after the event name).
@@ -146,7 +148,7 @@ end
 ---Creates an EventChain object.
 ---@param event string
 ---@param callback function
----@param regardTheCallbackReturn boolean
+---@param regardTheCallbackReturn? boolean
 function locals:createEventChain(event, callback, regardTheCallbackReturn)
   ---@type EventChain
   local chain = {
@@ -155,7 +157,8 @@ function locals:createEventChain(event, callback, regardTheCallbackReturn)
     turnOn = function(chainSelf) locals:turnOnEventChain(chainSelf) end,
     event = event,
     callback = callback,
-    regardTheCallbackReturn = regardTheCallbackReturn,
+    regardTheCallbackReturn = regardTheCallbackReturn and regardTheCallbackReturn or
+        false,
     next = {}
   }
   return chain
@@ -221,7 +224,8 @@ function locals:createCallbackChain(callback)
     Next = createNext,
     NextCallback = createNextCallback,
     callback = callback,
-    next = {}
+    next = {},
+    turnOn = function() end,
   }
 
   ---Executes the callback.
@@ -367,9 +371,10 @@ local function functionalTest_Cancel_Should_CancelAllActionsOfEventChains(
   C_Timer.After(1, function() reporter(value == 10) end)
 end
 
-SLASH_EVENTCHAIN_TEST1 = '/eventchain-test'
-SlashCmdList['EVENTCHAIN_TEST'] = function(msg)
-  local test_list = {
+tester:CreateTestCommand(
+  '/eventchain-test',
+  'EVENTCHAIN_TEST',
+  {
     unitTest_getFrame_ShouldReturnCachedFrameIfPossible =
         unitTest_getFrame_ShouldReturnCachedFrameIfPossible,
     unitTest_freeFrame_ShouldRemoveAllEvents =
@@ -386,6 +391,4 @@ SlashCmdList['EVENTCHAIN_TEST'] = function(msg)
     functionalTest_Cancel_Should_CancelAllActionsOfEventChains =
         functionalTest_Cancel_Should_CancelAllActionsOfEventChains,
   }
-  tester:PushTestsWithFilter(test_list, msg)
-  tester:StartTest()
-end
+)
