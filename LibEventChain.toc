@@ -15,4 +15,4 @@ libs\LibStub\LibStub.lua
 libs\LibSimpleTester\LibSimpleTester.lua
 #@end-no-lib-strip@
 
-LibEventChain\LibEventChain.lua
+src\LibEventChain.lua
