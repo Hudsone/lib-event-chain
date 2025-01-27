@@ -12,7 +12,7 @@
 
 #@no-lib-strip@
 libs\LibStub\LibStub.lua
-libs\LibSimpleTester\LibSimpleTester.lua
+libs\LibSimpleTester\src\LibSimpleTester.lua
 #@end-no-lib-strip@
 
 src\LibEventChain.lua
