@@ -1,4 +1,4 @@
-## Interface: 110007
+## Interface: 120000
 
 ## Title: LibEventChain
 ## Notes: An easier way to perform a chain of event activities.
